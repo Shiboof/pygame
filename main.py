@@ -45,13 +45,8 @@ def main():
                 running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    # Create a shot
-                    velocity = pygame.Vector2(0,-300).rotate(player.rotation)
-                    shot = Shot(player.position.x, player.position.y, velocity)
-                    # Add shot to groups
-                    updatable.add(shot)
-                    drawable.add(shot)
-                    shots.add(shot)
+                    # Call the player's shoot method
+                    player.shoot(updatable, drawable, shots)
 
         # check for collision between player and asteroid
         for asteroid in asteroids:
@@ -69,7 +64,7 @@ def main():
                 if shot.is_colliding(asteroid, []):
                     print("Shot hit an asteroid!")
                     shot.kill()  # Remove the shot
-                    asteroid.kill()  # Remove the asteroid
+                    asteroid.split()  # Remove the asteroid
                     break
 
         # Update and draw

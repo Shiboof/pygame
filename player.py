@@ -1,6 +1,7 @@
 from circleshape import CircleShape
 import pygame
 from constants import *
+from shot import Shot
 
 class Player(CircleShape):
     def __init__(self, x, y, radius):
@@ -10,6 +11,7 @@ class Player(CircleShape):
         self.player_radius = radius
         # create a field called rotation, initialized to 0
         self.rotation = 0
+        self.shoot_timer = 0.0 # Timer variable initialized to 0
 
     def draw(self, screen):
     # Convert triangle vertices to tuples of integers
@@ -24,10 +26,15 @@ class Player(CircleShape):
         c = self.position - forward * self.radius + right
         return [a, b, c]
     
-    def rotate(dt):
-        rotation += (PLAYER_TURN_SPEED * dt)
+    def rotate(self, dt):
+        if self.shoot_timer > 0:
+            self.shoot_timer -= dt
 
     def update(self, dt):
+        # Decrement the shoot timer
+        if self.shoot_timer > 0:
+            self.shoot_timer -= dt
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
             # Rotate left
@@ -50,3 +57,21 @@ class Player(CircleShape):
         if keys[pygame.K_s]:
             # Move backward
             self.position += pygame.Vector2(0, -1).rotate(self.rotation) * PLAYER_TURN_SPEED * dt
+    
+    def shoot(self, updatable, drawable, shots):
+        # Calculate the forward direction based on the player's rotation
+        if self.shoot_timer <= 0:
+            # Reset the shoot timer
+            self.shoot_timer = PLAYER_SHOOT_COOLDOWN
+            # Calculate the position of the shot
+            forward = pygame.Vector2(0, 1).rotate(self.rotation)
+            shot_position = self.position + forward * self.radius
+
+            # Create the shot with the calculated position and velocity
+            velocity = forward * PLAYER_SHOOT_SPEED
+            shot = Shot(shot_position.x, shot_position.y, velocity)
+
+            # Add the shot to the appropriate sprite groups
+            updatable.add(shot)
+            drawable.add(shot)
+            shots.add(shot)
