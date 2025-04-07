@@ -12,8 +12,8 @@ class Player(CircleShape):
         self.rotation = 0
 
     def draw(self, screen):
-        # Draw the player as a triangle
-        pygame.draw.polygon(screen, (255, 255, 255), self.triangle())
+    # Convert triangle vertices to tuples of integers
+        pygame.draw.polygon(screen, (255, 255, 255), [(int(v.x), int(v.y)) for v in self.triangle()])
     
     # in the player class
     def triangle(self):

@@ -33,7 +33,9 @@ class CircleShape(pygame.sprite.Sprite):
                 return True
             
         return False
-
+    
+    # Function to debug is colliding, providing more information
+    # Uncomment this to see the debug info
     # def is_colliding(self, other):
     #     distance = self.position.distance_to(other.position)
     #     print(f"Self position: {self.position}, Radius: {self.radius}")
