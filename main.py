@@ -54,6 +54,7 @@ def main():
                 if not collision_detected:
                     print("Game Over!")
                     collision_detected = True
+                    running = False  # Stop the game loop
                 break
         else:
             collision_detected = False # Reset
